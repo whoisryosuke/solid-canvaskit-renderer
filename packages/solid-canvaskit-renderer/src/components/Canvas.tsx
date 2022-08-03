@@ -1,5 +1,6 @@
 import CanvasKitInit, { CanvasKit } from "canvaskit-wasm";
 import { children as solidChildren, createEffect, createRenderEffect, createSignal } from "solid-js";
+import { ResolvedChildren } from "solid-js/types/reactive/signal";
 import store from "../store";
 import { SkNode } from "./SkNode";
 
@@ -41,11 +42,19 @@ export const Canvas = ({children}: Props) => {
 
     console.log('[CANVAS] children', children);
 
-    const getChildren = (childrenCheck) => {
+    /**
+     * If there's only 1 child, make it an array so we can loop over it
+     * @param childrenCheck 
+     * @returns 
+     */
+    const checkChildren = (childrenCheck: ResolvedChildren) => {
       if(!Array.isArray(childrenCheck)) return [childrenCheck];
       return childrenCheck;
     }
 
+    /**
+     * Initialize CanvasKit and connect `<canvas>` element
+     */
     createEffect(async () => {
       if(!initialized()) {
         await initializeCanvas()
@@ -53,20 +62,18 @@ export const Canvas = ({children}: Props) => {
       }
     })
 
-    createEffect(() => {
-      const realChildren = memo();
-      let childrenMap = getChildren(realChildren);
-      
-      childrenMap?.forEach((c: SkNode) => c.render())
-    })
-
-    // Render all children
+    /**
+     * Run the render method on all children (aka "drawing" all child elements)
+     */
     const memo = solidChildren(() => children);
     createEffect(() => {
+      // We should only be rendering when the canvas is initialized!
+      // Otherwise nothing renders unless props change
       if(initialized()) {
         console.log('[CANVAS-C] RENDERING CHILDREN!');
         const realChildren = memo();
-        let childrenMap = getChildren(realChildren);
+        // @ts-ignore Not sure where to wire this up...but this does return SkNode, not JSXElement
+        let childrenMap = checkChildren(realChildren) as SkNode[];
         
         childrenMap?.forEach((c: SkNode) => c.render())
       }

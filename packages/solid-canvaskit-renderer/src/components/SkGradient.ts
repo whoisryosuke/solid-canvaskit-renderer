@@ -15,7 +15,7 @@ export default class SkGradient extends SkNode {
         let paint = new context.Paint();
         console.log('[GRADIENT] DRAWING Paint process')
 
-        const colors = ['RED', 'GREEN', 'BLUE'];
+        const colors = this.props.get('color') ?? ['RED', 'GREEN', 'BLUE'];
 
         // See https://fiddle.skia.org/c/f48b22eaad1bb7adcc3faaa321754af6
         // for original c++ version.

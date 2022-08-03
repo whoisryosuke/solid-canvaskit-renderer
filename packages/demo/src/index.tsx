@@ -29,7 +29,7 @@ function App() {
 
   return (
       <Canvas>
-        <skGradient color="green" />
+        <skGradient color={['WHITE', 'RED', 'BLUE']} />
       </Canvas>
   );
 }
