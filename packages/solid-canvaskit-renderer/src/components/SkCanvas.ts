@@ -1,8 +1,8 @@
 import CanvasKitInit, { CanvasKit } from "canvaskit-wasm";
 import store from "../store";
-import { SkNode } from "../types";
+import { SkNode } from "./SkNode";
 
-export default class SkCanvas implements SkNode { 
+export default class SkCanvas extends SkNode { 
 
     async initialize() {
         // Check for existing context and surface
@@ -35,6 +35,6 @@ export default class SkCanvas implements SkNode {
         console.log('[CANVAS] Done with surface')
     }
     render() {
-        this.initialize();
+        // this.initialize();
     }
 }

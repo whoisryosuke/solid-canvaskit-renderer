@@ -1,6 +1,7 @@
 // example custom dom renderer
 import { createRenderer } from "solid-js/universal";
-import { createCanvasComponent } from "./create";
+import { SkNode } from "./components/SkNode";
+import { CanvasComponentList, createCanvasComponent } from "./create";
 import { VElement } from "./node"
 // import { createElement as createThreeElement, SupportedThreeElements } from "./three"
 
@@ -20,56 +21,68 @@ export const {
   spread,
   setProp,
   mergeProps
-} = createRenderer({
-  createElement(string: string): VElement {
+} = createRenderer<SkNode>({
+  createElement(string: CanvasComponentList): SkNode {
     log('creating element', string);
     
     
     // Create new CanvasKit element class (e.g. SkParagraph)
     const componentInstance = createCanvasComponent(string);
-    // Call render method?
-    log('Created component', componentInstance)
-    componentInstance.render();
+    // Call initialize / render method?
+    log('Created component', string, componentInstance)
+    if(!componentInstance) {
+      throw Error('[RENDERER] Could not make that - make sure its a supported component')
+    }
+    log('Initalized component', string)
+    componentInstance.initialize?.();
     // Maybe optional: Attach instance to a VElement class (aka virtual node)
 
-    return new VElement('text');
+    return componentInstance;
   },
-  createTextNode(value: string): VElement {
+  //@ts-ignore - we'll deal with this later
+  createTextNode(value: string): void {
     // @TODO: Figure out Text in ThreeJS
     // return createTextElement(value);
-    return new VElement('text');
+    return;
   },
-  replaceText(textNode: VElement, value) {
-    textNode.content = value;
+  replaceText(textNode: SkNode, value) {
+    // textNode = value;
   },
-  setProperty(node: VElement, name: string, value: any) {
-    node.setAttribute(name, value);
+  setProperty(node: SkNode, name: string, value: any) {
+    log('Setting prop', node, name, value);
+    node.setProp(name, value);
+    
+    // Re-render component
+    node.render();
   },
-  insertNode(parent: VElement, node: VElement, anchor: VElement) {
-    log('render', parent, node, node.childNodes[0], node.content)
+  insertNode(parent: SkNode, node: SkNode, anchor: SkNode) {
+    log('render', parent, node)
     if(!parent){
-      log('no parent found!', node, node.content, node.childNodes)
+      log('no parent found!', node)
     }
     log('inserting node', node);
+
+    // Run render method)
+    node.render();
     // parent.insertBefore(node, anchor);
 
     // Ideally we don't need this? Since CanvasKit/Skia doesn't use a node-based system
     // Our goal is just to take JSX and convert it to a render/draw call
     // Unless SolidJS needs this to manage JSX changes? (like hiding an element and thus removing from "DOM"?)
   },
-  isTextNode(node: VElement) {
+  isTextNode(node: SkNode) {
     return node.type === 3;
   },
-  removeNode(parent: VElement, node: VElement) {
+  removeNode(parent: SkNode, node: SkNode) {
     parent.removeChild(node);
   },
-  getParentNode(node: VElement) {
+  getParentNode(node: SkNode) {
     return node.parentNode;
   },
-  getFirstChild(node: VElement) {
+  getFirstChild(node: SkNode) {
     return node.firstChild;
   },
-  getNextSibling(node: VElement) {
+  getNextSibling(node: SkNode) {
     return node.nextSibling;
   }
 });

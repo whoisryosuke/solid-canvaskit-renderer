@@ -1,7 +1,7 @@
-import { SkNode } from "../types";
 import store from "../store";
+import { SkNode } from "./SkNode";
 
-export default class SkGradient implements SkNode {
+export default class SkGradient extends SkNode {
     
     render() {
         console.log('[GRADIENT] Attempting to render')
