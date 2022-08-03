@@ -1,5 +1,6 @@
 // example custom dom renderer
 import { createRenderer } from "solid-js/universal";
+import { createCanvasComponent } from "./create";
 import { VElement } from "./node"
 // import { createElement as createThreeElement, SupportedThreeElements } from "./three"
 
@@ -22,7 +23,14 @@ export const {
 } = createRenderer({
   createElement(string: string): VElement {
     log('creating element', string);
-    // return createThreeElement(string);
+    
+    
+    // Create new CanvasKit element class (e.g. SkParagraph)
+    const componentInstance = createCanvasComponent(string);
+    // Call render method?
+    log('Created component', componentInstance)
+    componentInstance.render();
+    // Maybe optional: Attach instance to a VElement class (aka virtual node)
 
     return new VElement('text');
   },

@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "canvaskit-wasm": "^0.35.0",
-    "solid-js": "^1.4.7"
+    "solid-js": "^1.4.7",
+    "zustand": "^4.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",

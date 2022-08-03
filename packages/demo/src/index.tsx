@@ -28,7 +28,9 @@ function App() {
   onCleanup(() => cancelAnimationFrame(frame));
 
   return (
-      <newleement></newleement>
+      <skCanvas>
+        <skGradient />
+      </skCanvas>
   );
 }
 
