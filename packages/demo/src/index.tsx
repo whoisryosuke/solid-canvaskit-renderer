@@ -1,5 +1,5 @@
 import { createSignal, onCleanup, batch } from "solid-js";
-import { render, VElement } from "solid-canvaskit-renderer";
+import { Canvas, render, VElement } from "solid-canvaskit-renderer";
 import Repeat from "./Repeat";
 
 const random = () => Math.random() * 360;
@@ -28,9 +28,9 @@ function App() {
   onCleanup(() => cancelAnimationFrame(frame));
 
   return (
-      <skCanvas>
+      <Canvas>
         <skGradient color="green" />
-      </skCanvas>
+      </Canvas>
   );
 }
 

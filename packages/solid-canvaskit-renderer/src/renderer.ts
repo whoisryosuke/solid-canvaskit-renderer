@@ -63,7 +63,7 @@ export const {
     log('inserting node', node);
 
     // Run render method)
-    node.render();
+    // node.render();
     // parent.insertBefore(node, anchor);
 
     // Ideally we don't need this? Since CanvasKit/Skia doesn't use a node-based system
